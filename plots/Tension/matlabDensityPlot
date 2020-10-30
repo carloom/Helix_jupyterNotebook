@@ -1,0 +1,25 @@
+#!/bin/sh
+
+if [ ! -d den_images  ]; then
+   mkdir den_images
+fi
+
+imageNum=0
+
+for file in $(ls)
+do
+    if [ -d $file ]; then
+       cd $file
+       if [ -e index.ndx ]; then
+          if [ ! -d ../den_images/ ]; then
+             mkdir ../den_images/
+          fi
+          cp ../read_xvg.m ../plotDensity.m .
+          matlab -batch "plotDensity(\"../den_images/${file}_den\")"
+          newNum=$((1 + imageNum ))
+          imageNum=$newNum
+          mv ../den_images/${file}_den.png  ../den_images/image_${imageNum}.png
+       fi
+       cd ..
+    fi
+done

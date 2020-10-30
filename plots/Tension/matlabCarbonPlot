@@ -1,0 +1,25 @@
+#!/bin/sh
+
+if [ ! -d images  ]; then
+   mkdir images
+fi
+
+imageNum=0
+
+for file in $(ls)
+do
+    if [ -d $file ]; then
+       cd $file
+       if [ -e index.ndx ]; then
+          if [ ! -d ../images/ ]; then
+             mkdir ../images/
+          fi
+          cp ../centroid.m ../createPlot.m .
+          matlab -batch "createPlot(\"../images/${file}_CA\")"
+          newNum=$((1 + imageNum ))
+          imageNum=$newNum
+          mv ../images/${file}_CA.png  ../images/image_${imageNum}.png
+       fi
+       cd ..
+    fi
+done
